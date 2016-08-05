@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.sandeep.sthapit.maps.RouteDisplayActivity">
+
+    <TextView
+        android:id="@+id/tv_query_route_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Possible Routes"
+        android:textSize="25sp"
+        android:layout_below="@+id/bt_query_show"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/tv_query_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="From"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/tv_query_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_query_from"
+        android:layout_marginTop="78dp"
+        android:text="To"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/et_query_from"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_query_from"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/et_query_to"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_query_to"
+        android:textSize="25sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHOW"
+        android:id="@+id/bt_query_show"
+        android:textSize="30sp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/tv_query_route_list"
+        android:onClick="show_routes"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        android:id="@+id/button"
+        android:textSize="30sp"
+        android:onClick="go_to_map"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
