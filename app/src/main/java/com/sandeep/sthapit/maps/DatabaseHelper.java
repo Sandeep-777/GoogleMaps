@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/com.sandeep.sthapit.maps/databases/";
 
-    private static String DB_NAME = "transport.db";
+    private static String DB_NAME = "transport1.db";
 
     private SQLiteDatabase myDataBase;
 
@@ -179,7 +179,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return route_list;
     }
 
-    public ArrayList<String> showList(String from, String to) {
+    public ArrayList<String> showIntersectList(String from, String to) {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<String> route_list = new ArrayList<String>();
         String data;
@@ -201,4 +201,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return route_list;
     }
 
+    public ArrayList<String> showUnionList(String from, String to) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> route_list = new ArrayList<String>();
+        String data;
+        Cursor cursor = db.rawQuery("SELECT r_id FROM place_to_route " +
+                        "WHERE p_id  IN ( " +
+                        "SELECT p_id FROM place WHERE name = '" + from + "' ) " +
+                        "UNION " +
+                        "SELECT r_id FROM place_to_route WHERE  p_id IN ( " +
+                        "SELECT p_id FROM place WHERE name = '" + to + "' )",
+                null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            data = cursor.getString(0);
+            route_list.add(data);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return route_list;
+    }
+
+    public ArrayList<String> showPlaceInRoute(String route) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> route_list = new ArrayList<String>();
+        String data;
+        Cursor cursor = db.rawQuery("SELECT name FROM place WHERE p_id IN " +
+                "(SELECT p_id FROM place_to_route WHERE r_id = '" + route + "')",
+                null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            data = cursor.getString(0);
+            route_list.add(data);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return route_list;
+    }
 }

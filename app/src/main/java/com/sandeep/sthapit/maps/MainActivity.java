@@ -77,7 +77,6 @@ public class MainActivity extends FragmentActivity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView locationTv = (TextView) findViewById(R.id.latlongLocation);
         TextView locationName = (TextView) findViewById(R.id.tv_location_name);
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
@@ -85,7 +84,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         marker = googleMap.addMarker(new MarkerOptions().position(latLng));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
+        //locationTv.setText("Latitude:" + latitude + ", Longitude:" + longitude);
         Geocoder geocoder = new Geocoder(getApplicationContext());
         try {
             List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
