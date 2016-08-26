@@ -39,7 +39,7 @@
             android:label="Maps" />
         <activity
             android:name=".RouteDisplayActivity"
-            android:label="Find Routes"></activity>
+            android:label="Find Routes" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -59,9 +59,12 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Maps2Activity" />
+        <activity android:name=".RouteMapActivity"></activity>
     </application>
 
 </manifest>

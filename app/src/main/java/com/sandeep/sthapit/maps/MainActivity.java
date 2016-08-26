@@ -23,16 +23,19 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity implements LocationListener {
 
     GoogleMap googleMap;
+    ArrayList<LatLng> markerPoints;
     Marker marker;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -43,6 +46,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        markerPoints = new ArrayList<LatLng>();
         //show error dialog if GoolglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
             finish();
@@ -73,6 +77,56 @@ public class MainActivity extends FragmentActivity implements LocationListener {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+
+                // Already two locations
+                if(markerPoints.size()>1){
+                    markerPoints.clear();
+                    googleMap.clear();
+                }
+
+                // Adding new item to the ArrayList
+                markerPoints.add(point);
+
+                // Creating MarkerOptions
+                MarkerOptions options = new MarkerOptions();
+
+                // Setting the position of the marker
+                options.position(point);
+
+                /**
+                 * For the start location, the color of marker is GREEN and
+                 * for the end location, the color of marker is RED.
+                 */
+                if(markerPoints.size()==1){
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                }else if(markerPoints.size()==2){
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                }
+
+                // Add new marker to the Google Map Android API V2
+                googleMap.addMarker(options);
+                RouteMapActivity r = new RouteMapActivity();
+
+                // Checks, whether start and end locations are captured
+                if(markerPoints.size() >= 2){
+                    LatLng origin = markerPoints.get(0);
+                    LatLng dest = markerPoints.get(1);
+                    r.drawRoute(googleMap,MainActivity.this,origin, dest,"en");
+
+//                    // Getting URL to the Google Directions API
+//                    String url = getDirectionsUrl(origin, dest);
+//
+//                    DownloadTask downloadTask = new DownloadTask();
+//
+//                    // Start downloading json data from Google Directions API
+//                    downloadTask.execute(url);
+                }
+            }
+        });
     }
 
     @Override
