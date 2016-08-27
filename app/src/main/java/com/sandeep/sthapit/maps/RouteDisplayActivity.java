@@ -59,7 +59,7 @@ public class RouteDisplayActivity extends AppCompatActivity {
                 return true;
 
             case R.id.menu_credits:
-                Toast.makeText(RouteDisplayActivity.this, "Save is Selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RouteDisplayActivity.this, "Prepared by Sandeep Sthapit, Ramesh Neupane, Ujjwa Jung Thapa, Bidur Parajuli and Nirajan Mahato", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:

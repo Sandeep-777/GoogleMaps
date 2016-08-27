@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -234,6 +236,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (!cursor.isAfterLast()) {
             data = cursor.getString(0);
             route_list.add(data);
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return route_list;
+    }
+
+    public ArrayList<LatLng> showLatLongPlace(String route) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<LatLng> route_list = new ArrayList<LatLng>();
+        String lat;
+        String longitude;
+        Cursor cursor = db.rawQuery("SELECT lat, long FROM place WHERE p_id IN " +
+                        "(SELECT p_id FROM place_to_route WHERE r_id = '" + route + "')",
+                null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            lat = cursor.getString(0);
+            longitude = cursor.getString(1);
+            LatLng location = new LatLng(Double.parseDouble(lat),Double.parseDouble(longitude));
+            route_list.add(location);
             cursor.moveToNext();
         }
         cursor.close();

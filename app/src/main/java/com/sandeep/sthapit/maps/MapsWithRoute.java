@@ -1,6 +1,10 @@
 package com.sandeep.sthapit.maps;
 
+/**
+ * Created by sandeep on 8/27/16.
+ */
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -20,6 +24,7 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -32,11 +37,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements LocationListener {
+
+public class MapsWithRoute extends FragmentActivity implements LocationListener {
 
     GoogleMap googleMap;
     ArrayList<LatLng> markerPoints;
     Marker marker;
+    int marker_count;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -47,6 +54,11 @@ public class MainActivity extends FragmentActivity implements LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         markerPoints = new ArrayList<LatLng>();
+
+        Intent intent = getIntent();
+
+        ArrayList<LatLng> locations = intent.getParcelableArrayListExtra("locations");
+        markerPoints = locations;
         //show error dialog if GoolglePlayServices not available
         if (!isGooglePlayServicesAvailable()) {
             finish();
@@ -56,69 +68,42 @@ public class MainActivity extends FragmentActivity implements LocationListener {
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.googleMap);
         googleMap = supportMapFragment.getMap();
         googleMap.setMyLocationEnabled(true);
+
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String bestProvider = locationManager.getBestProvider(criteria, true);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         Location location = locationManager.getLastKnownLocation(bestProvider);
+
         if (location != null) {
             onLocationChanged(location);
         }
-        locationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
+
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        marker_count = 0;
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
-            @Override
-            public void onMapClick(LatLng point) {
+                                            @Override
+                                            public void onMapClick(LatLng point) {
+                                                CameraUpdate center =
+                                                        CameraUpdateFactory.newLatLng(markerPoints.get(marker_count));
+                                                CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
 
-                // Already two locations
-                if (markerPoints.size() > 1) {
-                    markerPoints.clear();
-                    googleMap.clear();
-                }
+                                                googleMap.moveCamera(center);
+                                                googleMap.animateCamera(zoom);
+                                                int length_marker = markerPoints.size();
+                                                RouteMapActivity r = new RouteMapActivity();
+                                                for (marker_count = 0; marker_count < (length_marker - 1); marker_count++) {
+                                                    r.drawRoute(googleMap, MapsWithRoute.this, markerPoints.get(marker_count), markerPoints.get(marker_count + 1), "en");
+                                                }
+                                            }
 
-                // Adding new item to the ArrayList
-                markerPoints.add(point);
+                                        }
 
-                // Creating MarkerOptions
-                MarkerOptions options = new MarkerOptions();
+        );
 
-                // Setting the position of the marker
-                options.position(point);
-
-                /**
-                 * For the start location, the color of marker is GREEN and
-                 * for the end location, the color of marker is RED.
-                 */
-                if (markerPoints.size() == 1) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                } else if (markerPoints.size() == 2) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
-
-                // Add new marker to the Google Map Android API V2
-                googleMap.addMarker(options);
-                RouteMapActivity r = new RouteMapActivity();
-
-                // Checks, whether start and end locations are captured
-                if (markerPoints.size() >= 2) {
-                    LatLng origin = markerPoints.get(0);
-                    LatLng dest = markerPoints.get(1);
-                    r.drawRoute(googleMap, MainActivity.this, origin, dest, "en");
-                }
-            }
-        });
     }
 
     @Override
@@ -136,7 +121,7 @@ public class MainActivity extends FragmentActivity implements LocationListener {
             List<Address> listAddresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (null != listAddresses && listAddresses.size() > 0) {
                 String _Location = listAddresses.get(0).getAddressLine(0);
-                Toast.makeText(MainActivity.this, _Location, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsWithRoute.this, _Location, Toast.LENGTH_SHORT).show();
                 locationName.setText(_Location);
             }
         } catch (IOException e) {

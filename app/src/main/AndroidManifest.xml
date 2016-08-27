@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name="com.sandeep.sthapit.maps.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/icon_main"
         android:label="@string/app_name"
@@ -36,6 +37,9 @@
 
         <activity
             android:name=".MapsActivity"
+            android:label="Maps" />
+        <activity
+            android:name=".MapsWithRoute"
             android:label="Maps" />
         <activity
             android:name=".RouteDisplayActivity"
@@ -64,7 +68,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Maps2Activity" />
-        <activity android:name=".RouteMapActivity"></activity>
+        <activity android:name=".RouteMapActivity" />
+        <activity
+            android:name=".RequestActivity"
+            android:label="@string/title_activity_request"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
