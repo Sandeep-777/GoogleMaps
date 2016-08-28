@@ -45,7 +45,7 @@ public class RequestActivity extends Activity {
         Intent intent = getIntent();
 
         String name = intent.getStringExtra("name");
-        urlJsonObj = urlJsonObj1 + '/' + name;
+        urlJsonObj = urlJsonObj1 + "/" + name;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request);
 
