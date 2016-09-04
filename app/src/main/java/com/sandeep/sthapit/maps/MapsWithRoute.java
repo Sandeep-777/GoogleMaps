@@ -95,7 +95,7 @@ public class MapsWithRoute extends FragmentActivity implements LocationListener 
                                                 googleMap.animateCamera(zoom);
                                                 int length_marker = markerPoints.size();
                                                 RouteMapActivity r = new RouteMapActivity();
-                                                for (marker_count = 0; marker_count < (length_marker - 1); marker_count++) {
+                                                for (marker_count = 0; marker_count < (length_marker - 2); marker_count++) {
                                                     r.drawRoute(googleMap, MapsWithRoute.this, markerPoints.get(marker_count), markerPoints.get(marker_count + 1), "en");
                                                 }
                                             }

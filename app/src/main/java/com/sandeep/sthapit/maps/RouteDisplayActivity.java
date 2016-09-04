@@ -9,11 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +28,7 @@ public class RouteDisplayActivity extends AppCompatActivity {
     TextView tv_direct;
     TextView tv_indirect;
     ListView listView;
-    ListView indirect_list_View;
+    ListView indirectlistView;
     DatabaseHelper myDbHelper;
     ListView directListView;
     ListView indirectListView;
@@ -41,10 +39,6 @@ public class RouteDisplayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_display);
         init();
-        setListViewHeightBasedOnChildren(directListView);
-        setListViewHeightBasedOnChildren(indirectListView);
-        setListViewHeightBasedOnChildren(listView);
-        setListViewHeightBasedOnChildren(indirect_list_View);
     }
 
     @Override
@@ -76,7 +70,7 @@ public class RouteDisplayActivity extends AppCompatActivity {
     public void init() {
         myDbHelper = new DatabaseHelper(this);
         listView = (ListView) findViewById(R.id.listView_routeListDirect);
-        indirect_list_View = (ListView) findViewById(R.id.listView_routeListIndirect);
+        indirectlistView = (ListView) findViewById(R.id.listView_routeListIndirect);
         tv_direct = (TextView) findViewById(R.id.tv_direct_routes);
         tv_indirect = (TextView) findViewById(R.id.tv_indirect_routes);
         try {
@@ -143,26 +137,6 @@ public class RouteDisplayActivity extends AppCompatActivity {
 
         Toast.makeText(view.getContext(), "Map Location", Toast.LENGTH_SHORT).show();
         RouteDisplayActivity.this.startActivity(intent);
-    }
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
     }
 
 }

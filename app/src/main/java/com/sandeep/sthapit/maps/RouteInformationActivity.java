@@ -108,7 +108,7 @@ public class RouteInformationActivity extends AppCompatActivity {
 
     public void show_more_info(View view) {
         Intent intent = new Intent(RouteInformationActivity.this, RequestActivity.class);
-        intent.putExtra("name", route);
+        RouteInformationActivity.this.startActivity(intent);
     }
 
 }

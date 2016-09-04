@@ -13,13 +13,33 @@
         android:text="Route"
         android:textSize="30sp" />
 
-    <Button
-        android:id="@+id/button_show_on_map"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Show on Map"
-        android:onClick="show_route_on_map"/>
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/button_request_data"
+            android:layout_weight="0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Get More Info"
+            android:onClick="show_more_info"/>
+
+        <Button
+            android:id="@+id/button_show_on_map"
+            android:layout_weight="0.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:onClick="show_route_on_map"
+            android:text="Show on Map" />
+
+    </LinearLayout>
+
 
     <ListView
         android:id="@+id/lv_route_item"
